@@ -7,6 +7,7 @@
 
 #ifndef SRC_INCLUDE_ALTERNATIVE_H_
 #define SRC_INCLUDE_ALTERNATIVE_H_
+
 #include <iostream>
 #include <vector>
 
@@ -30,6 +31,11 @@ private:
 	string name;
 	vector<AlternativePair_t> pairs;
 
+	/*
+	 * For speed improvement - --install and --remove controlled by path to master
+	 */
+	AlternativePair_t *master;
+
 	string initscript;
 	string family;
 
@@ -41,25 +47,31 @@ public:
 
 	void add_pair(AlternativePair_t new_pair);
 	AlternativePair_t yield_pair();
+	AlternativePair_t link_is_present(string path);
 
 
 	// GETTERS, SETTERS
-	string get_name();
-	void set_name();
+	void set_name(string& name);
+	void set_family(string& family);
+	void set_initscript(string& path);
 
-	string get_initscript();
-	void set_initscript();
+	string const& get_name();
+	string const& get_family();
+	string const& get_initscript();
+	AlternativePair_t const& get_master();
 
-	string get_family();
-	void set_family();
 };
 
 
 vector<Alternative> *get_alternatives_from_file(FILE file);
 int save_alternative_to_file(Alternative alternative, FILE file);
 
+int set_alternative(Alternative alternative);
+int set_link(AlternativePair_t pair);
+int unset_link(string path);
 
-}
+
+}	// namespace alternatives
 
 
 #endif /* SRC_INCLUDE_ALTERNATIVE_H_ */
