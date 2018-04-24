@@ -20,7 +20,7 @@ class Install(BaseTest):
     def test_install_master_and_slave_link(self):
         """Tests whether master and slave link are linked to paths of the real files"""
         master = MasterLink(self.bin_dir)
-        slave = Link(self.bin_dir)
+        slave = Link(self.bin_dir, master)
         self.assertTrue(self.alternative_install(' '.join([str(master), str(slave)])))
 
         self.assertTrue(os.path.exists(master.link))

@@ -8,11 +8,14 @@ from avocado.utils import process
 
 class Link(object):
     """Serves as a dummy Slave Link for testing"""
-    def __init__(self, bin_dir):
+    def __init__(self, bin_dir, master=None):
         self.name = 'prog' + str(randint(0, 9999))
         self.path = mkstemp()[1]
         self.program_dir = mkdtemp()
         self.link = os.path.join(bin_dir, self.name)
+        if master:
+            self.master = master
+            self.master.slaves.append(self)
 
     def __str__(self):
         """Convert Link info to command line format used by alternatives"""
@@ -25,6 +28,7 @@ class MasterLink(Link):
     def __init__(self, bin_dir, priority=randint(1, 9999)):
         super(MasterLink, self).__init__(bin_dir)
         self.priority = priority
+        self.slaves = []
 
     def __str__(self):
         """Convert Master Link info to command line format used by alternatives"""
@@ -51,3 +55,4 @@ class BaseTest(Test):
         except process.CmdError as details:
             self.fail("Command failed: %s" % details)
         return True
+
