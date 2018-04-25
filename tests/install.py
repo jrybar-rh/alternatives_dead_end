@@ -1,11 +1,11 @@
-from basetest import BaseTest, MasterLink, Link
+from configtest import ConfigTest, MasterLink, Link
 import os
 
 
-class Install(BaseTest):
+class Install(ConfigTest):
 
     """
-    Network performance tests
+    Tests installing of alternatives
 
     :avocado: recursive
     """
@@ -13,7 +13,7 @@ class Install(BaseTest):
     def test_install_master_link_only(self):
         """Tests whether the link installed to bin_dir is linked to path where master is located"""
         master = MasterLink(self.bin_dir)
-        self.assertTrue(self.alternative_install(master))
+        self.assertTrue(self.alternatives_install(master))
         self.assertTrue(os.path.exists(master.link))
         self.assertEqual(master.path, os.path.realpath(master.link))
 

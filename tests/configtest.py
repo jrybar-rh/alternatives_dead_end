@@ -36,7 +36,7 @@ class MasterLink(Link):
         return cmd
 
 
-class BaseTest(Test):
+class ConfigTest(Test):
 
     def setUp(self):
         self.alt_dir = mkdtemp()
@@ -46,12 +46,22 @@ class BaseTest(Test):
 
         self.log.info("BaseTest setup() executed")
 
-    def alternative_install(self, cmd):
+    def alternatives_install(self, links):
         try:
             process.run("{} --install {} --altdir {} --admindir {}".format(self.alternatives_path,
-                                                                           cmd,
+                                                                           links,
                                                                            self.alt_dir,
                                                                            self.admin_dir))
+        except process.CmdError as details:
+            self.fail("Command failed: %s" % details)
+        return True
+
+    def alternatives_remove_all(self, name):
+        try:
+            process.run("{} --remove-all {} --altdir {} --admindir {}".format(self.alternatives_path,
+                                                                              name,
+                                                                              self.alt_dir,
+                                                                              self.admin_dir))
         except process.CmdError as details:
             self.fail("Command failed: %s" % details)
         return True
