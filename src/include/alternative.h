@@ -43,6 +43,9 @@ public:
 	Alternative();
 	Alternative(string name);
 	Alternative(string name, string initscript, string family);
+	Alternative(FILE file);
+	Alternative(string filename);
+
 	virtual ~Alternative();
 
 	void add_pair(AlternativePair_t new_pair);
@@ -60,15 +63,11 @@ public:
 	string const& get_initscript();
 	AlternativePair_t const& get_master();
 
+	int activate();
+	int deactivate();
+	int save_to_file(FILE file);
+
 };
-
-
-vector<Alternative> *get_alternatives_from_file(FILE file);
-int save_alternative_to_file(Alternative alternative, FILE file);
-
-int set_alternative(Alternative alternative);
-int set_link(AlternativePair_t pair);
-int unset_link(string path);
 
 
 }	// namespace alternatives

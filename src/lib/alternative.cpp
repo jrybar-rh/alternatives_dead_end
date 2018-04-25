@@ -10,26 +10,46 @@ using namespace std;
 
 namespace alternatives {
 
+// prototypes
+int set_link(AlternativePair_t pair);
+int unset_link(string path);
+
+
+// constructors, destructor
 Alternative::Alternative() {
 }
-
 
 Alternative::Alternative(string name) {
 }
 
-
 Alternative::Alternative(string name, string initscript, string family) {
 }
 
+Alternative::Alternative(FILE file) {
+}
+
+Alternative::Alternative(string filename) {
+}
 
 Alternative::~Alternative() {
 }
 
 
+
+// payload functions
 void Alternative::add_pair(AlternativePair_t new_pair) {
 }
 
+AlternativePair_t Alternative::yield_pair() {
+	return NULL;
+}
 
+AlternativePair_t Alternative::link_is_present(string path) {
+	return NULL;
+}
+
+
+// setters
 // probably unnecessary - can be avoided with pointer to master
 void alternatives::Alternative::set_name(string& name) {
 	this->name = name;
@@ -44,6 +64,7 @@ void alternatives::Alternative::set_family(string& family) {
 }
 
 
+// getters
 string const& Alternative::get_name() {
 	return this->name;
 }
@@ -60,25 +81,24 @@ const AlternativePair_t& Alternative::get_master() {
 	return this->master;
 }
 
-AlternativePair_t Alternative::yield_pair() {
+
+// control functions
+int Alternative::save_to_file(FILE file) {
+}
+
+int Alternative::activate() {
+}
+
+int Alternative::deactivate() {
 }
 
 
-AlternativePair_t Alternative::link_is_present(string path) {
-	return NULL;
-}
-
-
+/*
+ * This implements the old idea that one facility file holds several alternatives.
+ * Our goal is to maintain one file per alternative.
 vector<Alternative>* get_alternatives_from_file(FILE file) {
 }
-
-
-int save_alternative_to_file(Alternative alternative, FILE file) {
-}
-
-
-int set_alternative(Alternative alternative) {
-}
+*/
 
 
 int set_link(AlternativePair_t pair) {
@@ -88,5 +108,4 @@ int set_link(AlternativePair_t pair) {
 int unset_link(string path) {
 }
 
-}
-
+}	// namespace alternatives
