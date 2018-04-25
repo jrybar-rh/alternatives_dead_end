@@ -28,8 +28,7 @@ typedef struct {
 
 class Alternative {
 private:
-	string name;
-	vector<AlternativePair_t> pairs;
+	vector<AlternativePair_t*> pairs;
 
 	/*
 	 * For speed improvement - --install and --remove controlled by path to master
@@ -38,29 +37,29 @@ private:
 
 	string initscript;
 	string family;
+	int priority;
 
 public:
 	Alternative();
-	Alternative(string name);
-	Alternative(string name, string initscript, string family);
+	Alternative(string initscript, string family, int priority);
 	Alternative(FILE file);
 	Alternative(string filename);
 
 	virtual ~Alternative();
 
-	void add_pair(AlternativePair_t new_pair);
+	void add_pair(AlternativePair_t* new_pair);
 	AlternativePair_t yield_pair();
-	AlternativePair_t link_is_present(string path);
+	AlternativePair_t get_pair_with_link(string path);
 
 
 	// GETTERS, SETTERS
-	void set_name(string& name);
 	void set_family(string& family);
 	void set_initscript(string& path);
+	void set_priority(int priority);
 
-	string const& get_name();
 	string const& get_family();
 	string const& get_initscript();
+	const int get_priority();
 	AlternativePair_t const& get_master();
 
 	int activate();

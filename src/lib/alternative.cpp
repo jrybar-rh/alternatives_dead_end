@@ -11,18 +11,22 @@ using namespace std;
 namespace alternatives {
 
 // prototypes
-int set_link(AlternativePair_t pair);
-int unset_link(string path);
+int set_link(AlternativePair_t& pair);
+int unset_link(string const& path);
 
 
 // constructors, destructor
 Alternative::Alternative() {
+	this->master = NULL;
+	this->priority = 0;
 }
 
-Alternative::Alternative(string name) {
-}
-
-Alternative::Alternative(string name, string initscript, string family) {
+Alternative::Alternative(string initscript, string family, int priority) {
+	Alternative();
+	this->initscript = initscript;
+	this->family = family;
+	this->priority = priority;
+	this->master = NULL;
 }
 
 Alternative::Alternative(FILE file) {
@@ -32,52 +36,52 @@ Alternative::Alternative(string filename) {
 }
 
 Alternative::~Alternative() {
+	// TODO delete each record in vector pairs<>
 }
 
 
 
 // payload functions
-void Alternative::add_pair(AlternativePair_t new_pair) {
+void Alternative::add_pair(AlternativePair_t* new_pair) {
+	// TODO verify if new pair not present in pairs<>
 }
 
 AlternativePair_t Alternative::yield_pair() {
 	return NULL;
 }
 
-AlternativePair_t Alternative::link_is_present(string path) {
+AlternativePair_t Alternative::get_pair_with_link(string path) {
 	return NULL;
 }
 
 
 // setters
-// probably unnecessary - can be avoided with pointer to master
-void alternatives::Alternative::set_name(string& name) {
-	this->name = name;
-}
-
-void alternatives::Alternative::set_initscript(string& path) {
+inline void alternatives::Alternative::set_initscript(string& path) {
 	this->initscript = path;
 }
 
-void alternatives::Alternative::set_family(string& family) {
+inline void alternatives::Alternative::set_family(string& family) {
 	this->family = family;
+}
+
+inline void Alternative::set_priority(int priority) {
 }
 
 
 // getters
-string const& Alternative::get_name() {
-	return this->name;
-}
-
-string const& Alternative::get_initscript(){
+inline string const& Alternative::get_initscript(){
 	return this->initscript;
 }
 
-string const& Alternative::get_family(){
+inline string const& Alternative::get_family(){
 	return this->family;
 }
 
-const AlternativePair_t& Alternative::get_master() {
+inline const int Alternative::get_priority() {
+	return this->priority;
+}
+
+inline const AlternativePair_t& Alternative::get_master() {
 	return this->master;
 }
 
@@ -101,11 +105,12 @@ vector<Alternative>* get_alternatives_from_file(FILE file) {
 */
 
 
-int set_link(AlternativePair_t pair) {
+int set_link(AlternativePair_t& pair) {
 }
 
 
-int unset_link(string path) {
+int unset_link(string const& path) {
 }
 
 }	// namespace alternatives
+
