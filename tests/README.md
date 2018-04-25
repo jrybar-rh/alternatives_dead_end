@@ -1,0 +1,6 @@
+Install python-avocado(https://avocado-framework.github.io/)
+
+Run tests:
+
+`ALTERNATIVES_BINARY=$(path to the binary) avocado run tests/`
+
