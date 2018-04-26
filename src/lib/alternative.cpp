@@ -4,6 +4,7 @@
  *  Created on: Apr 16, 2018
  *      Author: jrybar
  */
+#include <iostream>
 #include "include/alternative.h"
 
 using namespace std;
@@ -19,6 +20,8 @@ int unset_link(string const& path);
 Alternative::Alternative() {
 	this->master = NULL;
 	this->priority = 0;
+	this->iter = NULL;
+	// initialize iter after first insertion into pairs!!!
 }
 
 Alternative::Alternative(string initscript, string family, int priority) {
@@ -43,45 +46,85 @@ Alternative::~Alternative() {
 
 // payload functions
 void Alternative::add_pair(AlternativePair_t* new_pair) {
-	// TODO verify if new pair not present in pairs<>
+	if ((new_pair == NULL) ||
+		(new_pair->link.length() == 0) ||
+		(new_pair->target.length() == 0) ) {
+		return;
+	}
+
+	AlternativePair_t existing_pair = get_pair_with_link(new_pair->link);
+
+	if (existing_pair != NULL) {
+		// throw exception? or do nothing and return?
+	}
+
+	if (new_pair->flags & FLAG_MASTER) {
+		if (this->master) {
+			// TODO throw exception if master exists?
+		}
+		else {
+			this->master = new_pair;
+		}
+	}
+
+	this->pairs.push_back(new_pair);
+	return;
 }
 
-AlternativePair_t Alternative::yield_pair() {
-	return NULL;
+
+const AlternativePair_t* Alternative::yield_pair() const {
+	const AlternativePair_t* ret_val;
+
+	if (this->pairs.size() == 0)
+		return NULL;
+
+	if ((this->iter == NULL) || (this->iter == pairs.end())) {
+		this->iter == pairs.begin();
+	}
+	ret_val = (this->iter)++;
+
+	return ret_val;
 }
 
-AlternativePair_t Alternative::get_pair_with_link(string path) {
+
+const AlternativePair_t* Alternative::get_pair_with_link(string path) const {
+
 	return NULL;
 }
 
 
 // setters
-inline void alternatives::Alternative::set_initscript(string& path) {
+void alternatives::Alternative::set_initscript(string& path) {
 	this->initscript = path;
 }
 
-inline void alternatives::Alternative::set_family(string& family) {
+
+void alternatives::Alternative::set_family(string& family) {
 	this->family = family;
 }
 
-inline void Alternative::set_priority(int priority) {
+
+void Alternative::set_priority(int priority) {
 }
 
 
 // getters
-inline string const& Alternative::get_initscript(){
+string const& Alternative::get_initscript(){
 	return this->initscript;
 }
 
-inline string const& Alternative::get_family(){
+
+string const& Alternative::get_family(){
 	return this->family;
 }
 
-inline const int Alternative::get_priority() {
+
+const int Alternative::get_priority() {
 	return this->priority;
 }
 
-inline const AlternativePair_t& Alternative::get_master() {
+
+const AlternativePair_t& Alternative::get_master() {
 	return this->master;
 }
 

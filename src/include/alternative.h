@@ -11,6 +11,8 @@
 #include <iostream>
 #include <vector>
 
+#define FLAG_MASTER 0x1
+
 
 using std::vector;
 using std::string;
@@ -39,6 +41,8 @@ private:
 	string family;
 	int priority;
 
+	std::vector<AlternativePair_t>::iterator iter;
+
 public:
 	Alternative();
 	Alternative(string initscript, string family, int priority);
@@ -48,8 +52,8 @@ public:
 	virtual ~Alternative();
 
 	void add_pair(AlternativePair_t* new_pair);
-	AlternativePair_t yield_pair();
-	AlternativePair_t get_pair_with_link(string path);
+	const AlternativePair_t* yield_pair() const;
+	const AlternativePair_t* get_pair_with_link(string path) const;
 
 
 	// GETTERS, SETTERS
