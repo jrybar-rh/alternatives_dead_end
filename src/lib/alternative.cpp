@@ -20,7 +20,7 @@ int unset_link(string const& path);
 Alternative::Alternative() {
 	this->master = NULL;
 	this->priority = 0;
-	this->iter = NULL;
+	this->yield_iterator = NULL;
 	// initialize iter after first insertion into pairs!!!
 }
 
@@ -78,16 +78,26 @@ const AlternativePair_t* Alternative::yield_pair() const {
 	if (this->pairs.size() == 0)
 		return NULL;
 
-	if ((this->iter == NULL) || (this->iter == pairs.end())) {
-		this->iter == pairs.begin();
+	if ((this->yield_iterator == NULL) || (this->yield_iterator == pairs.end())) {
+		this->yield_iterator == pairs.begin();
 	}
-	ret_val = (this->iter)++;
+	ret_val = *(this->yield_iterator)++;
 
 	return ret_val;
 }
 
 
 const AlternativePair_t* Alternative::get_pair_with_link(string path) const {
+
+	if (path.size() < 1 && pairs.size() < 0) {
+		return NULL;
+	}
+
+	for (vector<AlternativePair_t*>::iterator iter = pairs.begin(); iter != pairs.end(); iter++) {
+		if ((*iter)->link == path) {
+			return *iter;
+		}
+	}
 
 	return NULL;
 }
@@ -105,6 +115,7 @@ void alternatives::Alternative::set_family(string& family) {
 
 
 void Alternative::set_priority(int priority) {
+	this->priority = priority;
 }
 
 
@@ -131,12 +142,15 @@ const AlternativePair_t& Alternative::get_master() {
 
 // control functions
 int Alternative::save_to_file(FILE file) {
+	return 0;
 }
 
 int Alternative::activate() {
+	return 0;
 }
 
 int Alternative::deactivate() {
+	return 0;
 }
 
 
@@ -149,10 +163,12 @@ vector<Alternative>* get_alternatives_from_file(FILE file) {
 
 
 int set_link(AlternativePair_t& pair) {
+	return 0;
 }
 
 
 int unset_link(string const& path) {
+	return 0;
 }
 
 }	// namespace alternatives

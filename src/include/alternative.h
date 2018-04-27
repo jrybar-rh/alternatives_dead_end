@@ -41,7 +41,7 @@ private:
 	string family;
 	int priority;
 
-	std::vector<AlternativePair_t>::iterator iter;
+	std::vector<AlternativePair_t>::iterator yield_iterator;
 
 public:
 	Alternative();
