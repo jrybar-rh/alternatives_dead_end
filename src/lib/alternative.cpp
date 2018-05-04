@@ -6,6 +6,10 @@
  */
 #include <iostream>
 #include "include/alternative.h"
+#include "yaml-cpp/yaml.h"
+
+// g++ -I/usr/local/include -L/usr/local/lib -lyaml-cpp -o yaml-test yaml-test.cpp
+
 
 using namespace std;
 
@@ -36,6 +40,45 @@ Alternative::Alternative(FILE file) {
 }
 
 Alternative::Alternative(string filename) {
+	this->master = NULL;
+
+	YAML::Node config = YAML::LoadFile(filename);
+
+	if (config["family"]) {
+		this->family = config["family"].as<string>();
+	}
+
+	if (config["priority"]) {
+		this->priority = config["priority"].as<string>();
+	}
+
+	if (config["initscript"]) {
+		this->initscript = config["initscript"].as<string>();
+	}
+
+	if (config["mappings"]) {
+		for (YAML::const_iterator it = config["mappings"].begin(); it != config["mappings"].end(); it++) {
+			AlternativePair_t *new_pair = new AlternativePair_t();
+
+			try {
+				new_pair->link = (*it)["link"].as<string>();
+				new_pair->target = (*it)["target"].as<string>();
+
+				if ((*it)["flags"]) {
+					// new_pair->flags = setflags((*it)["flags"].as<string>());
+					// TODO if flag is master, check if not already set and set it like...
+					// if (new_pair->flags & MASTER) this->master = new_pair;
+
+				}
+			}
+			catch (std::exception ex) // TODO look for proper exceptions
+			{
+				// TODO emit warning, delete this new_pair and leave
+			}
+			//this->mappings.push_back()
+		}
+	}
+
 }
 
 Alternative::~Alternative() {
@@ -45,14 +88,14 @@ Alternative::~Alternative() {
 
 
 // payload functions
-void Alternative::add_pair(AlternativePair_t* new_pair) {
+void Alternative::add_mapping(AlternativePair_t* new_pair) {
 	if ((new_pair == NULL) ||
 		(new_pair->link.length() == 0) ||
 		(new_pair->target.length() == 0) ) {
 		return;
 	}
 
-	AlternativePair_t existing_pair = get_pair_with_link(new_pair->link);
+	AlternativePair_t existing_pair = get_mapping_with_link(new_pair->link);
 
 	if (existing_pair != NULL) {
 		// throw exception? or do nothing and return?
@@ -67,19 +110,19 @@ void Alternative::add_pair(AlternativePair_t* new_pair) {
 		}
 	}
 
-	this->pairs.push_back(new_pair);
+	this->mappings.push_back(new_pair);
 	return;
 }
 
 
-const AlternativePair_t* Alternative::yield_pair() const {
+const AlternativePair_t* Alternative::yield_mapping() const {
 	const AlternativePair_t* ret_val;
 
-	if (this->pairs.size() == 0)
+	if (this->mappings.size() == 0)
 		return NULL;
 
-	if ((this->yield_iterator == NULL) || (this->yield_iterator == pairs.end())) {
-		this->yield_iterator == pairs.begin();
+	if ((this->yield_iterator == NULL) || (this->yield_iterator == mappings.end())) {
+		this->yield_iterator == mappings.begin();
 	}
 	ret_val = *(this->yield_iterator)++;
 
@@ -87,13 +130,13 @@ const AlternativePair_t* Alternative::yield_pair() const {
 }
 
 
-const AlternativePair_t* Alternative::get_pair_with_link(string path) const {
+const AlternativePair_t* Alternative::get_mapping_with_link(string path) const {
 
-	if (path.size() < 1 && pairs.size() < 0) {
+	if (path.size() < 1 && mappings.size() < 0) {
 		return NULL;
 	}
 
-	for (vector<AlternativePair_t*>::iterator iter = pairs.begin(); iter != pairs.end(); iter++) {
+	for (vector<AlternativePair_t*>::iterator iter = mappings.begin(); iter != mappings.end(); iter++) {
 		if ((*iter)->link == path) {
 			return *iter;
 		}

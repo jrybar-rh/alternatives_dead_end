@@ -30,7 +30,7 @@ typedef struct {
 
 class Alternative {
 private:
-	vector<AlternativePair_t*> pairs;
+	vector<AlternativePair_t*> mappings;
 
 	/*
 	 * For speed improvement - --install and --remove controlled by path to master
@@ -51,9 +51,9 @@ public:
 
 	virtual ~Alternative();
 
-	void add_pair(AlternativePair_t* new_pair);
-	const AlternativePair_t* yield_pair() const;
-	const AlternativePair_t* get_pair_with_link(string path) const;
+	void add_mapping(AlternativePair_t* new_pair);
+	const AlternativePair_t* yield_mapping() const;
+	const AlternativePair_t* get_mapping_with_link(string path) const;
 
 
 	// GETTERS, SETTERS
