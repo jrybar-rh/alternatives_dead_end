@@ -30,6 +30,41 @@ class Install(ConfigTest):
         self.assertEqual(master.path, os.path.realpath(master.link))
         self.assertEqual(slave.path, os.path.realpath(slave.link))
 
+    def test_fail_when_name_unset(self):
+        """Tests whether fails when master name is unset"""
+        master = MasterLink(self.bin_dir)
+        master.name = ''
+        slave = Link(self.bin_dir, master)
+        self.assertFalse(self.alternatives_install([master, slave]))
+
+    def test_fail_when_master_path_unset(self):
+        """Tests whether fails when master path is unset"""
+        master = MasterLink(self.bin_dir)
+        master.path = ''
+        slave = Link(self.bin_dir, master)
+        self.assertFalse(self.alternatives_install([master, slave]))
+
+    def test_fail_when_priority_unset(self):
+        """Tests whether fails when master priority is unset"""
+        master = MasterLink(self.bin_dir)
+        master.priority = None
+        slave = Link(self.bin_dir, master)
+        self.assertFalse(self.alternatives_install([master, slave]))
+
+    def test_fail_when_slave_name_unset(self):
+        """Tests whether fails when slave name is unset"""
+        master = MasterLink(self.bin_dir)
+        slave = Link(self.bin_dir, master)
+        slave.name = ''
+        self.assertFalse(self.alternatives_install([master, slave]))
+
+    def test_fail_when_slave_path_unset(self):
+        """Tests whether fails when slave path is unset"""
+        master = MasterLink(self.bin_dir)
+        slave = Link(self.bin_dir, master)
+        slave.path = ''
+        self.assertFalse(self.alternatives_install([master, slave]))
+
 
 class RemoveAll(ConfigTest):
 
