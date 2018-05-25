@@ -1,8 +1,8 @@
-from avocado import Test
-from tempfile import mkdtemp, mkstemp
 import os
+from tempfile import mkdtemp, mkstemp
 from random import randint
 
+from avocado import Test
 from avocado.utils import process
 
 

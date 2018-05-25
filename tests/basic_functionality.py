@@ -1,5 +1,6 @@
-from configtest import ConfigTest, MasterLink, Link
 import os
+
+from configtest import ConfigTest, MasterLink, Link
 
 
 class Install(ConfigTest):
