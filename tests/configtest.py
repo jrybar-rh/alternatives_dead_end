@@ -47,13 +47,16 @@ class ConfigTest(Test):
         self.log.info("BaseTest setup() executed")
 
     def alternatives_install(self, links):
+        links = [str(link) for link in links]
+        links = ' '.join(links)
         try:
             process.run("{} --install {} --altdir {} --admindir {}".format(self.alternatives_path,
                                                                            links,
                                                                            self.alt_dir,
                                                                            self.admin_dir))
         except process.CmdError as details:
-            self.fail("Command failed: %s" % details)
+            self.log.info(details)
+            return False
         return True
 
     def alternatives_remove_all(self, name):
@@ -63,6 +66,7 @@ class ConfigTest(Test):
                                                                               self.alt_dir,
                                                                               self.admin_dir))
         except process.CmdError as details:
-            self.fail("Command failed: %s" % details)
+            self.log.info(details)
+            return False
         return True
 
